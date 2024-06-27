@@ -17,6 +17,9 @@ public class ReviewFirstSection {
     private String image;
     @Column(name = "orderid")
     private int orderID;
+
+    @Column(name = "display")
+    private int display = 1;
     @Column(name = "active")
     private int active = 1;
 
@@ -24,12 +27,21 @@ public class ReviewFirstSection {
 
     }
 
-    public ReviewFirstSection(String title, String description, String image, int orderID, int active) {
+    public ReviewFirstSection(String title, String description, String image, int orderID, int display, int active) {
         this.title = title;
         this.description = description;
         this.image = image;
         this.orderID = orderID;
+        this.display = display;
         this.active = active;
+    }
+
+    public int getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(int display) {
+        this.display = display;
     }
 
     public int getId() {

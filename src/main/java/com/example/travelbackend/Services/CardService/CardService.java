@@ -1,6 +1,7 @@
 package com.example.travelbackend.Services.CardService;
 
 import com.example.travelbackend.api.models.Card;
+import com.example.travelbackend.api.models.ReviewFirstSection;
 import jakarta.transaction.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,4 +17,5 @@ public interface CardService {
     @Transactional
     Card deleteCard(int id, Card card, MultipartFile cardImageFile);
 
+    void updateOrderIds(List<Card> cards);
 }

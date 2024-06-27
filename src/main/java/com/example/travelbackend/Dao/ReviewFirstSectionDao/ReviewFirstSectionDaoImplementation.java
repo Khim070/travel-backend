@@ -23,6 +23,7 @@ public class ReviewFirstSectionDaoImplementation implements ReviewFirstSectionDa
         return result;
     }
 
+
     @Override
     public ReviewFirstSection saveReviewFirstSection(ReviewFirstSection reviewFirstSection) {
         ReviewFirstSection result = entityManager.merge(reviewFirstSection);

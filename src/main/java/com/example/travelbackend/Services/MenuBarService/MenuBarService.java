@@ -1,7 +1,6 @@
 package com.example.travelbackend.Services.MenuBarService;
 
 import com.example.travelbackend.api.models.MenuBar;
-
 import java.util.List;
 
 public interface MenuBarService {
@@ -10,4 +9,5 @@ public interface MenuBarService {
     MenuBar updateMenuBar(int id, MenuBar menuBar);
     MenuBar findById(int id);
     MenuBar deleteMenuBar(int id, MenuBar menuBar);
+    void updateOrderIds(List<MenuBar> menuBars);
 }

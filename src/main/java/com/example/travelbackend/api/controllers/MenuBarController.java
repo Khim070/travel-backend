@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000")
 public class MenuBarController {
     private MenuBarService menuBarService;
 
@@ -35,6 +36,12 @@ public class MenuBarController {
     @PutMapping("/menubar/update/{id}")
     public MenuBar updateMenuBar(@PathVariable int id, @RequestBody MenuBar menuBar){
         return menuBarService.updateMenuBar(id, menuBar);
+    }
+
+    @PutMapping("/menubar/updateOrderIds")
+    public String updateOrderIds(@RequestBody List<MenuBar> menuBars) {
+        menuBarService.updateOrderIds(menuBars);
+        return "Order IDs updated!";
     }
 
     @PutMapping("/menubar/delete/{id}")

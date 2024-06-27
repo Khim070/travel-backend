@@ -31,7 +31,7 @@ public class AboutUsController {
     @PostMapping("/aboutUs")
     public AboutUs addAboutUs(
             @RequestPart("aboutUs") AboutUs aboutUs,
-            @RequestPart("aboutUsImage") MultipartFile ImageFile) {
+            @RequestPart(value = "image",required = false) MultipartFile ImageFile) {
         return aboutUsService.addAboutUs(aboutUs, ImageFile);
     }
 
@@ -39,7 +39,7 @@ public class AboutUsController {
     public AboutUs updateAboutUs(
             @PathVariable int id,
             @RequestPart("aboutUs") AboutUs aboutUs,
-            @RequestPart("aboutUsImage") MultipartFile ImageFile) {
+            @RequestPart(value = "image",required = false) MultipartFile ImageFile) {
         return aboutUsService.updateAboutUs(id, aboutUs, ImageFile);
     }
 
@@ -47,7 +47,7 @@ public class AboutUsController {
     public AboutUs deleteAboutUs(
             @PathVariable int id,
             @RequestPart("aboutUs") AboutUs aboutUs,
-            @RequestPart("aboutUsImage") MultipartFile ImageFile) {
+            @RequestPart(value = "image",required = false) MultipartFile ImageFile) {
         return aboutUsService.deleteAboutUs(id, aboutUs, ImageFile);
     }
 }

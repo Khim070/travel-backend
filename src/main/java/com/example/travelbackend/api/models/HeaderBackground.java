@@ -13,8 +13,9 @@ public class HeaderBackground {
     private String mainTitle;
     @Column(name = "bgimage", columnDefinition = "TEXT")
     private String bgImage;
+
     @Column(name = "logoimage", columnDefinition = "TEXT")
-    private String logoImage;
+    private String logoImage ;
     @Column(name = "buttontitle")
     private String buttonTitle;
     @Column(name = "buttonlink", columnDefinition = "TEXT")
@@ -23,7 +24,6 @@ public class HeaderBackground {
     private int active = 1;
 
     public HeaderBackground(){
-
     }
 
     public HeaderBackground(String mainTitle, String bgImage, String logoImage, String buttonTitle, String buttonLink, int active) {
@@ -91,3 +91,4 @@ public class HeaderBackground {
         this.active = active;
     }
 }
+

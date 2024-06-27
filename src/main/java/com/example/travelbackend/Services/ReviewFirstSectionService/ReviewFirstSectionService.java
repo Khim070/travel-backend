@@ -1,5 +1,6 @@
 package com.example.travelbackend.Services.ReviewFirstSectionService;
 
+import com.example.travelbackend.api.models.MenuBar;
 import com.example.travelbackend.api.models.ReviewFirstSection;
 import jakarta.transaction.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,4 +16,6 @@ public interface ReviewFirstSectionService {
     ReviewFirstSection findById(int id);
     @Transactional
     ReviewFirstSection deleteReviewFirstSection(int id, ReviewFirstSection reviewFirstSection, MultipartFile imageFile);
+
+    void updateOrderIds(List<ReviewFirstSection> reviewFirstSections);
 }

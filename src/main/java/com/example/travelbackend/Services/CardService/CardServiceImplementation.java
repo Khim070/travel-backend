@@ -2,6 +2,7 @@ package com.example.travelbackend.Services.CardService;
 
 import com.example.travelbackend.Dao.CardDao.CardDao;
 import com.example.travelbackend.api.models.Card;
+import com.example.travelbackend.api.models.ReviewFirstSection;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,5 +101,17 @@ public class CardServiceImplementation implements CardService{
         card.setId(id);
         card.setActive(0);
         return cardDao.saveCard(card);
+    }
+
+    @Override
+    public void updateOrderIds(List<Card> cards) {
+        for (Card card : cards) {
+            Card existingCard = cardDao.findById(card.getId());
+            if (existingCard == null) {
+                throw new RuntimeException("Card not found with id: " + card.getId());
+            }
+            existingCard.setOrderID(card.getOrderID());
+            cardDao.saveCard(existingCard);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.travelbackend.Services.ContactUsDetailService;
 
 import com.example.travelbackend.api.models.ContactUsDetail;
+import com.example.travelbackend.api.models.ReviewFirstSection;
 import jakarta.transaction.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,5 +16,5 @@ public interface ContactUsDetailService {
     ContactUsDetail findById(int id);
     @Transactional
     ContactUsDetail deleteContactUsDetail(int id, ContactUsDetail contactUsDetail, MultipartFile iconFile);
-
+    void updateOrderIds(List<ContactUsDetail> contactUsDetails);
 }

@@ -3,6 +3,7 @@ package com.example.travelbackend.Services.ReviewHeaderService;
 import com.example.travelbackend.Dao.MenuBarDao.MenuBarDao;
 import com.example.travelbackend.Dao.ReviewHeaderDao.ReviewHeaderDao;
 import com.example.travelbackend.api.models.MenuBar;
+import com.example.travelbackend.api.models.ReviewFirstSection;
 import com.example.travelbackend.api.models.ReviewHeader;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

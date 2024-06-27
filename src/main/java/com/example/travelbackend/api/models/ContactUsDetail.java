@@ -21,6 +21,8 @@ public class ContactUsDetail {
     private String link;
     @Column(name = "orderid")
     private int orderID;
+    @Column(name = "display")
+    private int display = 1;
     @Column(name = "active")
     private int active = 1;
 
@@ -28,14 +30,23 @@ public class ContactUsDetail {
 
     }
 
-    public ContactUsDetail(String name, String type, String description, String icon, String link, int orderID, int active) {
+    public ContactUsDetail(String name, String type, String description, String icon, String link, int orderID, int display, int active) {
         this.name = name;
         this.type = type;
         this.description = description;
         this.icon = icon;
         this.link = link;
         this.orderID = orderID;
+        this.display = display;
         this.active = active;
+    }
+
+    public int getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(int display) {
+        this.display = display;
     }
 
     public int getId() {

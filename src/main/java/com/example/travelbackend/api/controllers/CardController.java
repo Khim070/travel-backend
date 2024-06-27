@@ -33,7 +33,7 @@ public class CardController {
     @PostMapping("/card")
     public Card addCard(
             @RequestPart("card") Card card,
-            @RequestPart("cardImage") MultipartFile cardImageFile) {
+            @RequestPart(value = "cardImage",required = false) MultipartFile cardImageFile) {
         return cardService.addCard(card, cardImageFile);
     }
 
@@ -41,7 +41,7 @@ public class CardController {
     public Card updateCard(
             @PathVariable int id,
             @RequestPart("card") Card card,
-            @RequestPart("cardImage") MultipartFile cardImageFile) {
+            @RequestPart(value = "cardImage",required = false) MultipartFile cardImageFile) {
         return cardService.updateCard(id, card, cardImageFile);
     }
 
@@ -49,7 +49,13 @@ public class CardController {
     public Card deleteCard(
             @PathVariable int id,
             @RequestPart("card") Card card,
-            @RequestPart("cardImage") MultipartFile cardImageFile) {
+            @RequestPart(value = "cardImage",required = false) MultipartFile cardImageFile) {
         return cardService.deleteCard(id, card, cardImageFile);
+    }
+
+    @PutMapping("/card/updateOrderIds")
+    public String updateOrderIds(@RequestBody List<Card> cards) {
+        cardService.updateOrderIds(cards);
+        return "Order IDs updated!";
     }
 }

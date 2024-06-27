@@ -1,6 +1,7 @@
 package com.example.travelbackend.api.controllers;
 
 import com.example.travelbackend.Services.ReviewHeaderService.ReviewHeaderService;
+import com.example.travelbackend.api.models.ReviewFirstSection;
 import com.example.travelbackend.api.models.ReviewHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

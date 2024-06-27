@@ -15,12 +15,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class HeaderBackgroundServiceImplementation implements HeaderBackgroundService{
+
     @Value("${image.upload-dir}")
     private String uploadDir;
+
+    @Value("${server.port}")
+    private String port;
     private HeaderBackgroundDao headerBackgroundDao;
 
     @PostConstruct
@@ -44,62 +49,77 @@ public class HeaderBackgroundServiceImplementation implements HeaderBackgroundSe
 
     @Transactional
     @Override
-    public HeaderBackground addHeaderBackground(HeaderBackground headerBackground, MultipartFile bgImageFile, MultipartFile logoImageFile){
-        if (bgImageFile != null && !bgImageFile.isEmpty()) {
-            String bgFilename = bgImageFile.getOriginalFilename();
-            Path bgFilePath = Paths.get(uploadDir, bgFilename);
-            try {
-                Files.copy(bgImageFile.getInputStream(), bgFilePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    public HeaderBackground addHeaderBackground(HeaderBackground headerBackground, MultipartFile[] bgImageFiles, MultipartFile logoImageFiles) {
+        try {
+            StringBuilder bgImagePaths = new StringBuilder();
+            if (bgImageFiles != null) {
+                for (MultipartFile bgImageFile : bgImageFiles) {
+                    if (bgImageFile != null && !bgImageFile.isEmpty()) {
+                        String bgFilename = bgImageFile.getOriginalFilename();
+                        Path bgFilePath = Paths.get(uploadDir, bgFilename);
+                        Files.copy(bgImageFile.getInputStream(), bgFilePath, StandardCopyOption.REPLACE_EXISTING);
+                        if (bgImagePaths.length() > 0) {
+                            bgImagePaths.append("/");
+                        }
+                        bgImagePaths.append(bgFilename);
+                    }
+                }
             }
-            headerBackground.setBgImage(bgFilename);
-        }
+            headerBackground.setBgImage(bgImagePaths.length() > 0 ? bgImagePaths.toString() : null);
 
-        if (logoImageFile != null && !logoImageFile.isEmpty()) {
-            String logoFilename = logoImageFile.getOriginalFilename();
-            Path logoFilePath = Paths.get(uploadDir, logoFilename);
-            try {
-                Files.copy(logoImageFile.getInputStream(), logoFilePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (logoImageFiles != null && !logoImageFiles.isEmpty()) {
+                String logoFilename = logoImageFiles.getOriginalFilename();
+                Path logoFilePath = Paths.get(uploadDir, logoFilename);
+                Files.copy(logoImageFiles.getInputStream(), logoFilePath, StandardCopyOption.REPLACE_EXISTING);
+                headerBackground.setLogoImage(logoFilename);
             }
-            headerBackground.setLogoImage(logoFilename);
-        }
 
-        headerBackground.setId(0);
-        return headerBackgroundDao.saveHeaderBackground(headerBackground);
+            headerBackground.setId(0); // Set the ID to 0 for a new entry
+            return headerBackgroundDao.saveHeaderBackground(headerBackground);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding HeaderBackground", e);
+        }
     }
 
     @Transactional
     @Override
-    public HeaderBackground updateHeaderBackground(int id, HeaderBackground headerBackground, MultipartFile bgImageFile, MultipartFile logoImageFile){
-        if (bgImageFile != null && !bgImageFile.isEmpty()) {
-            String bgFilename = bgImageFile.getOriginalFilename();
-            Path bgFilePath = Paths.get(uploadDir, bgFilename);
-            try {
-                Files.copy(bgImageFile.getInputStream(), bgFilePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            headerBackground.setBgImage(bgFilename);
-        }
+    public HeaderBackground updateHeaderBackground(int id, HeaderBackground headerBackground, MultipartFile[] bgImageFiles, MultipartFile logoImageFiles) {
+        try {
+            HeaderBackground existingHeaderBackground = headerBackgroundDao.findById(id);
 
-        if (logoImageFile != null && !logoImageFile.isEmpty()) {
-            String logoFilename = logoImageFile.getOriginalFilename();
-            Path logoFilePath = Paths.get(uploadDir, logoFilename);
-            try {
-                Files.copy(logoImageFile.getInputStream(), logoFilePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            // Handle bgImageFiles
+            StringBuilder bgImagePaths = new StringBuilder();
+            if (bgImageFiles != null) {
+                for (MultipartFile bgImageFile : bgImageFiles) {
+                    if (bgImageFile != null && !bgImageFile.isEmpty()) {
+                        String bgFilename = bgImageFile.getOriginalFilename();
+                        Path bgFilePath = Paths.get(uploadDir, bgFilename);
+                        Files.copy(bgImageFile.getInputStream(), bgFilePath, StandardCopyOption.REPLACE_EXISTING);
+                        if (bgImagePaths.length() > 0) {
+                            bgImagePaths.append("/");
+                        }
+                        bgImagePaths.append(bgFilename);
+                    }
+                }
             }
-            headerBackground.setLogoImage(logoFilename);
-        }
+            headerBackground.setBgImage(bgImagePaths.length() > 0 ? bgImagePaths.toString() : existingHeaderBackground.getBgImage());
 
-        headerBackground.setId(id);
-        return headerBackgroundDao.saveHeaderBackground(headerBackground);
+            if (logoImageFiles != null && !logoImageFiles.isEmpty()) {
+                String logoFilename = logoImageFiles.getOriginalFilename();
+                Path logoFilePath = Paths.get(uploadDir, logoFilename);
+                Files.copy(logoImageFiles.getInputStream(), logoFilePath, StandardCopyOption.REPLACE_EXISTING);
+                headerBackground.setLogoImage(logoFilename);
+            } else {
+                headerBackground.setLogoImage(existingHeaderBackground.getLogoImage());
+            }
+            headerBackground.setId(id);
+            return headerBackgroundDao.saveHeaderBackground(headerBackground);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error updating HeaderBackground", e);
+        }
     }
-
 
     @Override
     public HeaderBackground findById(int id) {
@@ -108,31 +128,14 @@ public class HeaderBackgroundServiceImplementation implements HeaderBackgroundSe
 
     @Transactional
     @Override
-    public HeaderBackground deleteHeaderBackground(int id, HeaderBackground headerBackground, MultipartFile bgImageFile, MultipartFile logoImageFile) {
-        if (bgImageFile != null && !bgImageFile.isEmpty()) {
-            String bgFilename = bgImageFile.getOriginalFilename();
-            Path bgFilePath = Paths.get(uploadDir, bgFilename);
-            try {
-                Files.copy(bgImageFile.getInputStream(), bgFilePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            headerBackground.setBgImage(bgFilename);
-        }
+    public HeaderBackground deleteHeaderBackground(int id, HeaderBackground headerBackground) {
 
-        if (logoImageFile != null && !logoImageFile.isEmpty()) {
-            String logoFilename = logoImageFile.getOriginalFilename();
-            Path logoFilePath = Paths.get(uploadDir, logoFilename);
-            try {
-                Files.copy(logoImageFile.getInputStream(), logoFilePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            headerBackground.setLogoImage(logoFilename);
+        HeaderBackground existingHeaderBackground = headerBackgroundDao.findById(id);
+        if (existingHeaderBackground != null) {
+            existingHeaderBackground.setActive(headerBackground.getActive());
+            headerBackgroundDao.saveHeaderBackground(existingHeaderBackground);
+            return existingHeaderBackground;
         }
-
-        headerBackground.setId(id);
-        headerBackground.setActive(0);
-        return headerBackgroundDao.saveHeaderBackground(headerBackground);
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.travelbackend.Services.ReviewHeaderService;
 
+import com.example.travelbackend.api.models.ReviewFirstSection;
 import com.example.travelbackend.api.models.ReviewHeader;
 
 import java.util.List;

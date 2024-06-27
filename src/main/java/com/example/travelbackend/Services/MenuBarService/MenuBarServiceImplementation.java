@@ -51,4 +51,17 @@ public class MenuBarServiceImplementation implements MenuBarService {
         MenuBar result = menuBarDao.saveMenuBar(menuBar);
         return result;
     }
+
+    @Transactional
+    @Override
+    public void updateOrderIds(List<MenuBar> menuBars) {
+        for (MenuBar menuBar : menuBars) {
+            MenuBar existingMenuBar = menuBarDao.findById(menuBar.getId());
+            if (existingMenuBar == null) {
+                throw new RuntimeException("MenuBar not found with id: " + menuBar.getId());
+            }
+            existingMenuBar.setOrderId(menuBar.getOrderId());
+            menuBarDao.saveMenuBar(existingMenuBar);
+        }
+    }
 }

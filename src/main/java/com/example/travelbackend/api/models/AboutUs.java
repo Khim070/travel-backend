@@ -17,6 +17,8 @@ public class AboutUs {
     private String description;
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
+    @Column(name = "display")
+    private int display = 1;
     @Column(name = "active")
     private int active = 1;
 
@@ -24,12 +26,21 @@ public class AboutUs {
 
     }
 
-    public AboutUs(String title, String tag, String description, String image, int active) {
+    public AboutUs(String title, String tag, String description, String image, int display, int active) {
         this.title = title;
         this.tag = tag;
         this.description = description;
         this.image = image;
+        this.display = display;
         this.active = active;
+    }
+
+    public int getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(int display) {
+        this.display = display;
     }
 
     public int getId() {

@@ -1,7 +1,9 @@
 package com.example.travelbackend.Services.ContactUsDetailService;
 
 import com.example.travelbackend.Dao.ContactUsDetailDao.ContactUsDetailDao;
+import com.example.travelbackend.api.models.AboutUs;
 import com.example.travelbackend.api.models.ContactUsDetail;
+import com.example.travelbackend.api.models.ReviewFirstSection;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +66,7 @@ public class ContactUsDetailServiceImplementation implements ContactUsDetailServ
     @Transactional
     @Override
     public ContactUsDetail updateContactUsDetail(int id, ContactUsDetail contactUsDetail, MultipartFile iconFile) {
+        ContactUsDetail existingContactUsDetail = contactUsDetailDao.findById(id);
         if (iconFile != null && !iconFile.isEmpty()) {
             String iconFilename = iconFile.getOriginalFilename();
             Path iconFilePath = Paths.get(uploadDir, iconFilename);
@@ -73,6 +76,8 @@ public class ContactUsDetailServiceImplementation implements ContactUsDetailServ
                 throw new RuntimeException(e);
             }
             contactUsDetail.setIcon(iconFilename);
+        }else {
+            contactUsDetail.setIcon(existingContactUsDetail.getIcon());
         }
 
         contactUsDetail.setId(id);
@@ -87,6 +92,7 @@ public class ContactUsDetailServiceImplementation implements ContactUsDetailServ
     @Transactional
     @Override
     public ContactUsDetail deleteContactUsDetail(int id, ContactUsDetail contactUsDetail, MultipartFile iconFile) {
+        ContactUsDetail existingContactUsDetail = contactUsDetailDao.findById(id);
         if (iconFile != null && !iconFile.isEmpty()) {
             String iconFilename = iconFile.getOriginalFilename();
             Path iconFilePath = Paths.get(uploadDir, iconFilename);
@@ -96,10 +102,25 @@ public class ContactUsDetailServiceImplementation implements ContactUsDetailServ
                 throw new RuntimeException(e);
             }
             contactUsDetail.setIcon(iconFilename);
+        } else {
+            contactUsDetail.setIcon(existingContactUsDetail.getIcon());
         }
 
         contactUsDetail.setId(id);
         contactUsDetail.setActive(0);
         return contactUsDetailDao.saveContactUsDetail(contactUsDetail);
+    }
+
+    @Transactional
+    @Override
+    public void updateOrderIds(List<ContactUsDetail> contactUsDetails) {
+        for (ContactUsDetail contactUsDetail : contactUsDetails) {
+            ContactUsDetail existingContactUsDetail = contactUsDetailDao.findById(contactUsDetail.getId());
+            if (existingContactUsDetail == null) {
+                throw new RuntimeException("ContactUsDetailService not found with id: " + contactUsDetail.getId());
+            }
+            existingContactUsDetail.setOrderID(contactUsDetail.getOrderID());
+            contactUsDetailDao.saveContactUsDetail(existingContactUsDetail);
+        }
     }
 }

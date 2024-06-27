@@ -33,7 +33,7 @@ public class ContactUsDetailController {
     @PostMapping("/contactusdetail")
     public ContactUsDetail addContactUsDetail(
             @RequestPart("contactusdetail") ContactUsDetail contactUsDetail,
-            @RequestPart("Icon") MultipartFile IconFile) {
+            @RequestPart(value = "icon",required = false) MultipartFile IconFile) {
         return contactUsDetailService.addContactUsDetail(contactUsDetail, IconFile);
     }
 
@@ -41,15 +41,21 @@ public class ContactUsDetailController {
     public ContactUsDetail updateContactUsDetail(
             @PathVariable int id,
             @RequestPart("contactusdetail") ContactUsDetail contactUsDetail,
-            @RequestPart("Icon") MultipartFile IconFile) {
+            @RequestPart(value = "icon",required = false) MultipartFile IconFile) {
         return contactUsDetailService.updateContactUsDetail(id, contactUsDetail, IconFile);
+    }
+
+    @PutMapping("/contactusdetail/updateOrderIds")
+    public String updateOrderIds(@RequestBody List<ContactUsDetail> contactUsDetails) {
+        contactUsDetailService.updateOrderIds(contactUsDetails);
+        return "Order IDs updated!";
     }
 
     @PutMapping("/contactusdetail/delete/{id}")
     public ContactUsDetail deleteContactUsDetail(
             @PathVariable int id,
             @RequestPart("contactusdetail") ContactUsDetail contactUsDetail,
-            @RequestPart("Icon") MultipartFile IconFile) {
+            @RequestPart(value = "icon",required = false) MultipartFile IconFile) {
         return contactUsDetailService.deleteContactUsDetail(id, contactUsDetail, IconFile);
     }
 }

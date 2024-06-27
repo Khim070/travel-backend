@@ -1,8 +1,8 @@
-package com.example.travelbackend.Services.ReviewFirstSectionService;
+package com.example.travelbackend.Services.OurTeamService;
 
+import com.example.travelbackend.Dao.OurTeamDao.OurTeamDao;
 import com.example.travelbackend.Dao.ReviewFirstSectionDao.ReviewFirstSectionDao;
-import com.example.travelbackend.api.models.HeaderBackground;
-import com.example.travelbackend.api.models.MenuBar;
+import com.example.travelbackend.api.models.OurTeam;
 import com.example.travelbackend.api.models.ReviewFirstSection;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -20,13 +20,14 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Service
-public class ReviewFirstSectionServiceImplementation implements ReviewFirstSectionService{
+public class OurTeamServiceImplementation implements OurTeamService{
+
     @Value("${image.upload-dir}")
     private String uploadDir;
 
     @Value("${server.port}")
     private String port;
-    private ReviewFirstSectionDao reviewFirstSectionDao;
+    private OurTeamDao ourTeamDao;
 
     @PostConstruct
     public void init() {
@@ -38,18 +39,18 @@ public class ReviewFirstSectionServiceImplementation implements ReviewFirstSecti
     }
 
     @Autowired
-    public ReviewFirstSectionServiceImplementation(ReviewFirstSectionDao reviewFirstSectionDao){
-        this.reviewFirstSectionDao = reviewFirstSectionDao;
+    public OurTeamServiceImplementation(OurTeamDao ourTeamDao){
+        this.ourTeamDao = ourTeamDao;
     }
 
     @Override
-    public List<ReviewFirstSection> findAll() {
-        return reviewFirstSectionDao.findAll();
+    public List<OurTeam> findAll() {
+        return ourTeamDao.findAll();
     }
 
     @Transactional
     @Override
-    public ReviewFirstSection addReviewFirstSection(ReviewFirstSection reviewFirstSection, MultipartFile imageFile) {
+    public OurTeam addOurTeam(OurTeam ourTeam, MultipartFile imageFile) {
         if (imageFile != null && !imageFile.isEmpty()) {
             String imageFilename = imageFile.getOriginalFilename();
             Path imageFilePath = Paths.get(uploadDir, imageFilename);
@@ -58,17 +59,17 @@ public class ReviewFirstSectionServiceImplementation implements ReviewFirstSecti
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            reviewFirstSection.setImage(imageFilename);
+            ourTeam.setPhoto(imageFilename);
         }
 
-        reviewFirstSection.setId(0);
-        return reviewFirstSectionDao.saveReviewFirstSection(reviewFirstSection);
+        ourTeam.setId(0);
+        return ourTeamDao.saveOurTeam(ourTeam);
     }
 
     @Transactional
     @Override
-    public ReviewFirstSection updateReviewFirstSection(int id, ReviewFirstSection reviewFirstSection, MultipartFile imageFile) {
-        ReviewFirstSection existingReviewFirstSection = reviewFirstSectionDao.findById(id);
+    public OurTeam updateOurTeam(int id, OurTeam ourTeam, MultipartFile imageFile) {
+        OurTeam existingOurTeam = ourTeamDao.findById(id);
         if (imageFile != null && !imageFile.isEmpty()) {
             String imageFilename = imageFile.getOriginalFilename();
             Path imageFilePath = Paths.get(uploadDir, imageFilename);
@@ -77,23 +78,24 @@ public class ReviewFirstSectionServiceImplementation implements ReviewFirstSecti
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            reviewFirstSection.setImage(imageFilename);
+            ourTeam.setPhoto(imageFilename);
         }else {
-            reviewFirstSection.setImage(existingReviewFirstSection.getImage());
+            ourTeam.setPhoto(existingOurTeam.getPhoto());
         }
 
-        reviewFirstSection.setId(id);
-        return reviewFirstSectionDao.saveReviewFirstSection(reviewFirstSection);
+        ourTeam.setId(id);
+        return ourTeamDao.saveOurTeam(ourTeam);
     }
 
     @Override
-    public ReviewFirstSection findById(int id) {
-        return reviewFirstSectionDao.findById(id);
+    public OurTeam findById(int id) {
+        return ourTeamDao.findById(id);
     }
 
     @Transactional
     @Override
-    public ReviewFirstSection deleteReviewFirstSection(int id, ReviewFirstSection reviewFirstSection, MultipartFile imageFile) {
+    public OurTeam deleteOurTeam(int id, OurTeam ourTeam, MultipartFile imageFile) {
+        OurTeam existingOurTeam = ourTeamDao.findById(id);
         if (imageFile != null && !imageFile.isEmpty()) {
             String imageFilename = imageFile.getOriginalFilename();
             Path imageFilePath = Paths.get(uploadDir, imageFilename);
@@ -102,26 +104,26 @@ public class ReviewFirstSectionServiceImplementation implements ReviewFirstSecti
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            reviewFirstSection.setImage(imageFilename);
+            ourTeam.setPhoto(imageFilename);
+        }else {
+            ourTeam.setPhoto(existingOurTeam.getPhoto());
         }
 
-        reviewFirstSection.setId(id);
-        reviewFirstSection.setActive(0);
-        ReviewFirstSection savedReviewFirstSection = reviewFirstSectionDao.saveReviewFirstSection(reviewFirstSection);
-
-        return savedReviewFirstSection;
+        ourTeam.setId(id);
+        ourTeam.setActive(0);
+        return ourTeamDao.saveOurTeam(ourTeam);
     }
 
     @Transactional
     @Override
-    public void updateOrderIds(List<ReviewFirstSection> reviewFirstSections) {
-        for (ReviewFirstSection reviewFirstSection : reviewFirstSections) {
-            ReviewFirstSection existingReviewFirstSection = reviewFirstSectionDao.findById(reviewFirstSection.getId());
-            if (existingReviewFirstSection == null) {
-                throw new RuntimeException("ReviewFirstSectionService not found with id: " + reviewFirstSection.getId());
+    public void updateOrderIds(List<OurTeam> ourTeams) {
+        for (OurTeam ourTeam : ourTeams) {
+            OurTeam existingOurTeam = ourTeamDao.findById(ourTeam.getId());
+            if (existingOurTeam == null) {
+                throw new RuntimeException("OurTeam not found with id: " + ourTeam.getId());
             }
-            existingReviewFirstSection.setOrderID(reviewFirstSection.getOrderID());
-            reviewFirstSectionDao.saveReviewFirstSection(existingReviewFirstSection);
+            existingOurTeam.setOrderID(ourTeam.getOrderID());
+            ourTeamDao.saveOurTeam(existingOurTeam);
         }
     }
 }

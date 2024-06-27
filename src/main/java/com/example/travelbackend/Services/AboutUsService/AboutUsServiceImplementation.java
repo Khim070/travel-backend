@@ -3,6 +3,7 @@ package com.example.travelbackend.Services.AboutUsService;
 import com.example.travelbackend.Dao.AboutUsDao.AboutUsDao;
 import com.example.travelbackend.Dao.CardDao.CardDao;
 import com.example.travelbackend.api.models.AboutUs;
+import com.example.travelbackend.api.models.HeaderBackground;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,7 @@ public class AboutUsServiceImplementation implements AboutUsService{
     @Transactional
     @Override
     public AboutUs updateAboutUs(int id, AboutUs aboutUs, MultipartFile ImageFile) {
+        AboutUs existingAboutUs = aboutUsDao.findById(id);
         if (ImageFile != null && !ImageFile.isEmpty()) {
             String imageFilename = ImageFile.getOriginalFilename();
             Path imageFilePath = Paths.get(uploadDir, imageFilename);
@@ -74,8 +76,9 @@ public class AboutUsServiceImplementation implements AboutUsService{
                 throw new RuntimeException(e);
             }
             aboutUs.setImage(imageFilename);
+        } else {
+            aboutUs.setImage(existingAboutUs.getImage());
         }
-
         aboutUs.setId(id);
         return aboutUsDao.saveAboutUs(aboutUs);
     }
@@ -88,6 +91,7 @@ public class AboutUsServiceImplementation implements AboutUsService{
     @Transactional
     @Override
     public AboutUs deleteAboutUs(int id, AboutUs aboutUs, MultipartFile ImageFile) {
+        AboutUs existingAboutUs = aboutUsDao.findById(id);
         if (ImageFile != null && !ImageFile.isEmpty()) {
             String imageFilename = ImageFile.getOriginalFilename();
             Path imageFilePath = Paths.get(uploadDir, imageFilename);
@@ -97,6 +101,8 @@ public class AboutUsServiceImplementation implements AboutUsService{
                 throw new RuntimeException(e);
             }
             aboutUs.setImage(imageFilename);
+        }else {
+            aboutUs.setImage(existingAboutUs.getImage());
         }
 
         aboutUs.setId(id);

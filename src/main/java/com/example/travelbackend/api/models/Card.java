@@ -30,6 +30,9 @@ public class Card {
     private String cardImage;
     @Column(name = "orderid")
     private int orderID;
+
+    @Column(name = "display")
+    private int display = 1;
     @Column(name = "active")
     private int active = 1;
 
@@ -37,7 +40,7 @@ public class Card {
 
     }
 
-    public Card(String name, String address, Double price, String day, String buttonBook, String buttonLink, double rate, String type, String cardImage, int orderID, int active) {
+    public Card(String name, String address, Double price, String day, String buttonBook, String buttonLink, double rate, String type, String cardImage, int orderID, int display, int active) {
         this.name = name;
         this.address = address;
         this.price = price;
@@ -48,7 +51,16 @@ public class Card {
         this.type = type;
         this.cardImage = cardImage;
         this.orderID = orderID;
+        this.display = display;
         this.active = active;
+    }
+
+    public int getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(int display) {
+        this.display = display;
     }
 
     public int getId() {
