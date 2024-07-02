@@ -15,9 +15,10 @@ public class ReviewFirstSection {
     private String description;
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
+    @Column(name = "color")
+    private String color;
     @Column(name = "orderid")
     private int orderID;
-
     @Column(name = "display")
     private int display = 1;
     @Column(name = "active")
@@ -27,13 +28,22 @@ public class ReviewFirstSection {
 
     }
 
-    public ReviewFirstSection(String title, String description, String image, int orderID, int display, int active) {
+    public ReviewFirstSection(String title, String description, String image, int orderID, int display, String color, int active) {
         this.title = title;
         this.description = description;
         this.image = image;
+        this.color = color;
         this.orderID = orderID;
         this.display = display;
         this.active = active;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public int getDisplay() {
