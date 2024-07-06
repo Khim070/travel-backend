@@ -72,34 +72,6 @@ public class UserServiceImplementation implements UserService{
         return userDao.saveUser(user);
     }
 
-//    @Transactional
-//    @Override
-//    public User updateUser(int id, User user, MultipartFile photo) {
-//        User existingUser = userDao.findById(id);
-//        if (photo != null && !photo.isEmpty()) {
-//            String photoFilename = photo.getOriginalFilename();
-//            Path photoFilePath = Paths.get(uploadDir, photoFilename);
-//            try {
-//                Files.copy(photo.getInputStream(), photoFilePath, StandardCopyOption.REPLACE_EXISTING);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//            user.setPhoto(photoFilename);
-//        }else {
-//            user.setPhoto(existingUser.getPhoto());
-//        }
-//
-//        if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-//            user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        } else {
-//            user.setPassword(existingUser.getPassword());
-//        }
-//
-//        user.setId(id);
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        return userDao.saveUser(user);
-//    }
-
     @Transactional
     @Override
     public User updateUser(int id, User user, MultipartFile photo) {
@@ -107,7 +79,7 @@ public class UserServiceImplementation implements UserService{
         if (existingUser == null) {
             throw new RuntimeException("User not found");
         }
-        
+
         if (photo != null && !photo.isEmpty()) {
             String photoFilename = photo.getOriginalFilename();
             Path photoFilePath = Paths.get(uploadDir, photoFilename);

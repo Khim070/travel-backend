@@ -2,7 +2,6 @@ package com.example.travelbackend.Services.UserService;
 
 import com.example.travelbackend.api.models.User;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
