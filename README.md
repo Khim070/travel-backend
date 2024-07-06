@@ -13,6 +13,53 @@ This is the backend service for the Travel & Tour Management System Application,
 - `src/main/java`: Contains the main application code.
 - `src/main/resources`: Contains configuration files and static resources.
 
+travel-backend/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── example.travelbackend/
+│   │   │           ├── api/
+│   │   │           │   ├── controllers/
+│   │   │           │   │   ├── MenuBarController.java
+│   │   │           │   │   └── OtherController.java
+│   │   │           │   └── models/
+│   │   │           │       ├── MenuBar.java
+│   │   │           │       └── OtherModel.java
+│   │   │           ├── configuration/
+│   │   │           │   ├── CorsConfig.java
+│   │   │           │   ├── SecurityConfig.java
+│   │   │           │   └── Webconfig.java
+│   │   │           ├── Dao/
+│   │   │           │   ├── MenuBarDao/
+│   │   │           │   |   ├── MenuBarDao.java
+│   │   │           │   |   └── MenuBarDaoImplementation.java
+│   │   │           │   └── OtherDao/
+│   │   │           │       ├── OtherDao.java
+│   │   │           │       └── OtherDaoImplementation.java
+│   │   │           ├── Services/
+│   │   │           │   ├── MenuBarService/
+│   │   │           │   |   ├── MenuBarService.java
+│   │   │           │   |   └── MenuBarServiceImplementation.java
+│   │   │           │   └── OtherService/
+│   │   │           │       ├── OtherService.java
+│   │   │           │       └── OtherServiceImplementation.java
+│   │   │           └── TravelBackendApplication.java
+│   │   ├── resources/
+│   │   │   ├── application.properties
+│   │   │   ├── static
+│   │   │   └── templats
+│   ├── test/
+│   │   └── java/
+│   │       └── com/
+│   │           └── yourpackage/
+│   │               └── TravelBackendApplicationTests.java
+├── .gitignore
+├── README.md
+├── mvnw
+├── mvnw.cmd
+└── pom.xml
+
 ## Prerequisites
 - Java Development Kit (JDK) 8 or later
 - Maven
